@@ -217,7 +217,7 @@ Return ONLY the post text. No quotes, no explanations.`;
       requestBody.reasoning_effort = "low";
     }
 
-    response = await fetch("https://api.openai.com/v1/chat/completions", {
+    response = await fetch(`${(process.env.OPENAI_BASE_URL || "https://api.openai.com/v1").replace(/\/+$/, "")}/chat/completions`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -447,7 +447,7 @@ Return ONLY a JSON array of ${IDEA_COUNT} strings. Example:
       requestBody.reasoning_effort = "low";
     }
 
-    response = await fetch("https://api.openai.com/v1/chat/completions", {
+    response = await fetch(`${(process.env.OPENAI_BASE_URL || "https://api.openai.com/v1").replace(/\/+$/, "")}/chat/completions`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -672,7 +672,7 @@ Return ONLY the edited post. No quotes, no explanations.`;
       requestBody.reasoning_effort = "low";
     }
 
-    response = await fetch("https://api.openai.com/v1/chat/completions", {
+    response = await fetch(`${(process.env.OPENAI_BASE_URL || "https://api.openai.com/v1").replace(/\/+$/, "")}/chat/completions`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -1087,7 +1087,7 @@ Return ONLY a valid JSON array. Each object has "title", "content", and "imagePr
         requestBody.reasoning_effort = "low";
       }
 
-      response = await fetch("https://api.openai.com/v1/chat/completions", {
+      response = await fetch(`${(process.env.OPENAI_BASE_URL || "https://api.openai.com/v1").replace(/\/+$/, "")}/chat/completions`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

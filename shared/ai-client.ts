@@ -27,10 +27,15 @@ export interface ChatResult { text: string; inputTokens: number; outputTokens: n
 export type FetchLike = (url: string, init: RequestInit) => Promise<Response>;
 
 const OPENAI_COMPATIBLE: Record<Exclude<AgentProvider, "anthropic" | "google">, string> = {
-  openai: "https://api.openai.com/v1/chat/completions",
-  grok: "https://api.x.ai/v1/chat/completions",
-  kimi: "https://api.moonshot.ai/v1/chat/completions",
+  openai: "https://api.openai.com/v1",
+  grok: "https://api.x.ai/v1",
+  kimi: "https://api.moonshot.ai/v1",
 };
+
+/** A trailing slash is stripped so an override like https://host/v1 composes with /chat/completions. */
+function chatCompletionsUrl(base: string): string {
+  return `${base.replace(/\/+$/, "")}/chat/completions`;
+}
 
 export function requestFor(req: ChatRequest): { url: string; headers: Record<string, string>; body: string } {
   const maxTokens = req.maxTokens ?? 1024;
@@ -63,7 +68,7 @@ export function requestFor(req: ChatRequest): { url: string; headers: Record<str
   // xAI and Moonshot still take the older name.
   const cap = req.provider === "openai" ? { max_completion_tokens: maxTokens } : { max_tokens: maxTokens };
   return {
-    url: OPENAI_COMPATIBLE[req.provider],
+    url: chatCompletionsUrl(process.env.OPENAI_BASE_URL || OPENAI_COMPATIBLE[req.provider]),
     headers: { "content-type": "application/json", Authorization: `Bearer ${req.apiKey}` },
     body: JSON.stringify({
       model: req.model,
