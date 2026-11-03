@@ -9,6 +9,8 @@ WORKDIR /app
 # local files are served at relative URLs, and the entrypoint reads APP_URL
 # at start. One image runs at any address.
 ENV LINKEDGROW_EDITION=self-hosted NEXT_TELEMETRY_DISABLED=1
+# /data must exist during build so sqlite-backed code can open its database file
+RUN mkdir -p /data
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npx next build
